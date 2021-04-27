@@ -96,6 +96,8 @@ def main(args=None):
                 f, ax = plt.subplots(args.n_rows, args.n_cols, sharey='all')
                 row, col = 0, 0
 
+    plt.show()
+
 
 if __name__ == "__main__":
     main()

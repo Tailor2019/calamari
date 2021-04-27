@@ -84,7 +84,7 @@ def write_xlsx(xlsx_file, eval_datas):
             ws.write(i + 1, 6, errs / r["total_char_errs"] if r["total_char_errs"] > 0 else 0)
             ws.write(i + 1, 7, sync_errs)
             ws.write(i + 1, 8, "{}".format(confusion))
-            all_cs.append(errs / max(len(gt), len(pred)))
+            all_cs.append(errs / max(len(gt), len(pred), 1))
 
         # total confusions
         ws = workbook.add_worksheet("{} - global".format(prefix))

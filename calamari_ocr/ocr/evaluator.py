@@ -57,6 +57,9 @@ class Evaluator:
                                                                                               desc="Loading GT",
                                                                                               )}
 
+        if len(self.preloaded_gt) == 0:
+            raise ValueError('Empty GT dataset.')
+
     def run(self, *, gt_dataset: DataGeneratorParams, pred_dataset: DataGeneratorParams):
         """ evaluate on the given dataset
         Returns

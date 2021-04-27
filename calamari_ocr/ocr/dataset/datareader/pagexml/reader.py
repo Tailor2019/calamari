@@ -354,12 +354,12 @@ class PageXMLReader(CalamariDataGenerator[PageXML]):
             for xml in tqdm(self.params.xmlfiles, desc="Writing PageXML files", total=len(self.params.xmlfiles)):
                 page = self.pages(split_all_ext(xml)[0])
                 with open(split_all_ext(xml)[0] + extension, 'w') as f:
-                    f.write(etree.tounicode(page.getroottree()))
+                    f.write(etree.tounicode(page.getroottree(), pretty_print=True))
 
     def _store_page(self, extension, page_id):
         page = self.pages[page_id]
         with open(split_all_ext(page_id)[0] + extension, 'w') as f:
-            f.write(etree.tounicode(page.getroottree()))
+            f.write(etree.tounicode(page.getroottree(), pretty_print=True))
 
     def _sample_iterator(self):
         all_samples = zip(self.params.images, self.params.xml_files, range(len(self.params.images)))
