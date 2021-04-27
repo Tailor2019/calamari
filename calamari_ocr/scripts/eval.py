@@ -80,7 +80,7 @@ def write_xlsx(xlsx_file, eval_datas):
             ws.write(i + 1, 2, pred.strip())
             ws.write(i + 1, 3, len_gt)
             ws.write(i + 1, 4, errs)
-            ws.write(i + 1, 5, errs / max(len(gt), len(pred)))
+            ws.write(i + 1, 5, errs / max(len(gt), len(pred), 1))
             ws.write(i + 1, 6, errs / r["total_char_errs"] if r["total_char_errs"] > 0 else 0)
             ws.write(i + 1, 7, sync_errs)
             ws.write(i + 1, 8, "{}".format(confusion))
