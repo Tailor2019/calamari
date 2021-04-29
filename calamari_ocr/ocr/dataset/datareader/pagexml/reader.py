@@ -9,7 +9,7 @@ from tfaip.data.pipeline.definitions import PipelineMode, INPUT_PROCESSOR, TARGE
 from tqdm import tqdm
 from lxml import etree
 import cv2 as cv
-from typing import List, Generator, Optional
+from typing import List, Generator, Optional, Iterable, Dict, Any
 from enum import IntEnum
 from calamari_ocr.ocr.dataset.datareader.base import CalamariDataGenerator, CalamariDataGeneratorParams, InputSample, \
     SampleMeta
@@ -48,12 +48,13 @@ class PageXMLDatasetLoader:
         self.skip_invalid = skip_invalid
         self.skip_commented = skip_commented
 
-    def load(self, img, xml):
+    def load(self, img, xml) -> Iterable[Dict[str, Any]]:
         if not os.path.exists(xml):
-            if self._non_existing_as_empty:
-                return None
+            if self.skip_invalid:
+                logger.warning(f"File '{xml}' does not exist. Skipping since `skip_invalid=True`.")
+                return []
             else:
-                raise Exception("File '{}' does not exist.".format(xml))
+                raise FileNotFoundError(f"File '{xml}' does not exist.")
 
         root = etree.parse(xml).getroot()
         self.root = root
@@ -64,7 +65,7 @@ class PageXMLDatasetLoader:
         else:
             return self._samples_from_book(root, img, page_id)
 
-    def _samples_gt_from_book(self, root, img, page_id):
+    def _samples_gt_from_book(self, root, img, page_id) -> Iterable[Dict[str, Any]]:
         ns = {"ns": root.nsmap[None]}
         imgfile = root.xpath('//ns:Page',
                              namespaces=ns)[0].attrib["imageFilename"]
@@ -132,7 +133,7 @@ class PageXMLDatasetLoader:
                 "img_width": img_w
             }
 
-    def _samples_from_book(self, root, img, page_id):
+    def _samples_from_book(self, root, img, page_id) -> Iterable[Dict[str, Any]]:
         ns = {"ns": root.nsmap[None]}
         imgfile = root.xpath('//ns:Page',
                              namespaces=ns)[0].attrib["imageFilename"]
